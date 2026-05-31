@@ -72,23 +72,23 @@ xhost +
 ```
 Change the <IP_ADDRESS>
 ```
-docker exec -ti osmobts_pluto bash -c 'ping <IP_ADDRESS>'
+docker exec -ti srsran_pluto bash -c 'ping <IP_ADDRESS>'
 ```
 or test ssh
 ```
-ssh-keygen -R '<IP_ADDRESS>' && docker exec -ti osmobts_pluto bash -c 'ssh root@<IP_ADDRESS>'
+ssh-keygen -R '<IP_ADDRESS>' && docker exec -ti srsran_pluto bash -c 'ssh root@<IP_ADDRESS>'
 ```
 </br>
 MDP is `analog`
 
 ```
-docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --info'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --info'
 ```
 ```
-docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --find'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --find'
 ```
 ```
-docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
 ```
 
 ## ON TERMINAL 1
