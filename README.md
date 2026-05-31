@@ -33,7 +33,7 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 ```
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb25
 ```
-## Creating image
+## Building image
 ```
 rm Dockerfile && mv Dockerfile.* Dockerfile
 ```
