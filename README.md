@@ -43,7 +43,27 @@ docker  build -t srsran_pluto:v1 .
 
 ## Building and launching srsran
 ```
-docker rm -f srsran_pluto && docker run -tid --privileged   --cgroupns=host   --net=host   -v /sys/fs/cgroup:/sys/fs/cgroup:rw   -v /dev:/dev   -v /dev/bus/usb:/dev/bus/usb   -v /tmp/.X11-unix:/tmp/.X11-unix:ro   -v /home/user/.Xauthority:/home/user/.Xauthority:ro   --tmpfs /run   --tmpfs /run/lock   --env="DISPLAY=$DISPLAY"   --env="LC_ALL=C.UTF-8"   --env="LANG=C.UTF-8"   --cap-add=sys_nice   --cap-add=ipc_lock   --ulimit rtprio=99   --ulimit memlock=-1    --name srsran_pluto   --hostname srsran_pluto   srsran_pluto:v1
+docker rm -f srsran_pluto && \
+docker run -tid --privileged \
+  --cgroupns=host \
+  --net=host \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  -v /dev:/dev \
+  -v /dev/bus/usb:/dev/bus/usb \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+  -v /home/user/.Xauthority:/home/user/.Xauthority:ro \
+  --tmpfs /run \
+  --tmpfs /run/lock \
+  --env="DISPLAY=$DISPLAY" \
+  --env="LC_ALL=C.UTF-8" \
+  --env="LANG=C.UTF-8" \
+  --cap-add=sys_nice \
+  --cap-add=ipc_lock \
+  --ulimit rtprio=99 \
+  --ulimit memlock=-1 \
+  --name srsran_pluto \
+  --hostname srsran_pluto \
+  srsran_pluto:v1
 ```
 ## Testing driver PlutoSDR
 ```
