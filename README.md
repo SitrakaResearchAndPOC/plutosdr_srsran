@@ -13,7 +13,7 @@ apt update
 apt install docker.io wget
 ```
 ```
-apt-get install linux-tools-common install linux-tools-generic
+apt-get install linux-tools-common linux-tools-generic
 ```
 ```
 cpupower frequency-set -g performance
