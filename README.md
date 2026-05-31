@@ -18,7 +18,7 @@ apt-get install linux-tools-common install linux-tools-generic
 ```
 cpupower frequency-set -g performance
 ```
-## Choice config file
+## Choice Dockerfile
 * PRB = 6
 ```
 https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb6
