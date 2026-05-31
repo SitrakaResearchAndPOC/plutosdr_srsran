@@ -82,13 +82,13 @@ ssh-keygen -R '<IP_ADDRESS>' && docker exec -ti srsran_pluto bash -c 'ssh root@<
 MDP is `analog`
 
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --info'
+docker exec -ti srsran_pluto bash -c '$SRS_INSTALL/bin/SoapySDRUtil  --info'
 ```
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --find'
+docker exec -ti srsran_pluto bash -c '$SRS_INSTALL/bin/SoapySDRUtil  --find'
 ```
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
+docker exec -ti srsran_pluto bash -c '$SRS_INSTALL/bin/SoapySDRUtil  --probe="driver=plutosdr"'
 ```
 
 ## ON TERMINAL 1
