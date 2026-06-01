@@ -126,22 +126,22 @@ ssh-keygen -R '<IP_ADDRESS>' && docker exec -ti srsran_pluto bash -c 'ssh root@<
 MDP is `analog`
 
 ```
-docker exec -ti srsran_pluto bash -c '$SRSRAN_INSTALL/bin/SoapySDRUtil  --info'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --info'
 ```
 ```
-docker exec -ti srsran_pluto bash -c '$SRSRAN_INSTALL/bin/SoapySDRUtil  --find'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --find'
 ```
 ```
-docker exec -ti srsran_pluto bash -c '$SRSRAN_INSTALL/bin/SoapySDRUtil  --probe="driver=plutosdr"'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"'
 ```
 
 ## ON TERMINAL 1
 ```
-cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'cd ${HOME}/.config/srsran; ${SRSRAN_INSTALL}/bin/srsepc epc.conf'
+cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'srsepc'
 ```
 Tape ctrl+shift+T
 
 ## ON TERMINAL 2
 ```
-cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'cd ${HOME}/.config/srsran; ${SRSRAN_INSTALL}/bin/srsenb enb.conf'
+cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'srsenb'
 ```
