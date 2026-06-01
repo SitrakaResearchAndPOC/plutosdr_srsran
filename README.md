@@ -1,8 +1,8 @@
 # plutosdr_srsran
-## Flashing firmeware 
+## I. Flashing firmeware 
 [Flashing_firmeware](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/firmeware)
 
-## Installing tools
+## II. Installing tools
 ```
 rm -rf srsran_pluto && mkdir srsran_pluto && cd srsran_pluto
 ```
@@ -18,7 +18,7 @@ apt-get install linux-tools-common linux-tools-generic
 ```
 cpupower frequency-set -g performance
 ```
-## Choice Dockerfile
+## III. Choice Dockerfile
 * PRB = 6
 ```
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb6
@@ -33,7 +33,7 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 ```
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb25
 ```
-## Building image
+## IV. Building image
 ```
 [ -f "Dockerfile" ] && rm Dockerfile; mv Dockerfile.* Dockerfile
 ```
@@ -42,8 +42,8 @@ docker  build -t srsran_pluto:v1 .
 ```
 
 
-## Building and launching srsran
-## DIRECT USB
+## V. Launching srsran
+### DIRECT USB
 ```
 docker rm -f srsran_pluto 2> /dev/null ; \
 docker run -tid --privileged \
@@ -75,7 +75,7 @@ CHECK USB CONFIGURATION
 docker exec -it srsran_pluto bash -c \
 'bash check_pluto_usb_cfg.sh /root/.config/srsran/enb.conf'
 ```
-## DIRECT ETHERENET
+### DIRECT ETHERENET
 ```
 export NAME_PLUTO=fishball
 ```
@@ -110,7 +110,7 @@ docker exec -it srsran_pluto bash -c \
 'bash check_pluto_network_cfg.sh  /root/.config/srsran/enb.conf'
 ```
 
-## Testing driver PlutoSDR
+## VI. Testing driver PlutoSDR
 ```
 xhost +
 ```
@@ -134,14 +134,49 @@ docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --find'
 ```
 docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"'
 ```
-
-## ON TERMINAL 1
+## V. Running srsRAN LTE
+### ON TERMINAL 1
 ```
 cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'srsepc'
 ```
 Tape ctrl+shift+T
 
-## ON TERMINAL 2
+### ON TERMINAL 2
 ```
 cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'srsenb'
 ```
+## VI. Sharing Internet
+New terminal , tape ctrl+shit+t </br>
+### Finding interface which gives internet
+```
+ifconfig
+```
+Let name the interface <if_name> 
+### sharing lte traffic
+```
+apt update && \
+apt install wget && \
+wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && \
+chmod +x 
+```
+```
+bash srsepc_if_masq.sh <if_name>
+```
+### Routing internet over the interface
+```
+sysctl -w net.ipv4.ip_forward=1
+```
+### Disabling firewall 
+```
+ufw disable
+```
+
+## VII. Configuring SIM & APN
+1) Download [GR-SIM](https://github.com/SitrakaResearchAndPOC/gr-sim-write) </br>
+2) Download grsp config [CONFIG](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/blob/main/configs_simcard_grsp/phil_greenland.grsp) ; my SIM supprot only xor for authentication algorithm </br>
+3) Load and write the config on the green card using card write </br>
+4) Plug and search network on parameter/sim_card/search_network and select network mcc=999 and mnc=69 </br>
+5) If the simcard is authenticated on the network for future searching it's more quick to active/desactivate avion mode </br>
+6) Configure APN indeed name should be `srsapn` and mcc on the apn should be 999 and mnc should be 69 </br>
+
+
