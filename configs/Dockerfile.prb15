@@ -146,6 +146,12 @@ RUN sed -i '/cell_list/,/)/ s/^[[:space:]]*dl_earfcn[[:space:]]*=.*/    dl_earfc
 # prb = 25 so value of prach_frequ_offset = 4
 RUN sed -i 's/^\([[:space:]]*prach_freq_offset[[:space:]]*=\).*/\1 4;/' $SIB  
 
+WORKDIR /
+RUN wget  https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/check_pluto_network_cfg.sh && \
+    wget  https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/check_pluto_usb_cfg.sh && \
+    chmod +x *.sh
+
+
 # =========================================================
 # CLEANUP
 # =========================================================
