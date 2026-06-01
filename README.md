@@ -35,7 +35,7 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 ```
 ## Building image
 ```
-[-f "Dockerfile"] && rm Dockerfile; mv Dockerfile.* Dockerfile
+[ -f "Dockerfile"] && rm Dockerfile; mv Dockerfile.* Dockerfile
 ```
 ```
 docker  build -t srsran_pluto:v1 .
