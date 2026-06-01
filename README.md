@@ -132,7 +132,7 @@ docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --info'
 docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --find'
 ```
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"'
+docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"
 ```
 
 ## ON TERMINAL 1
