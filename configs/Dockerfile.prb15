@@ -231,10 +231,10 @@ ENV MNC=69
 ## xor or mil depend of the simcard : read the simcard using gr_sim.exe to find the supported authentication
 
 RUN sed -i "/^\[enb\]/,/^\[/{s/^mcc *= *.*/mcc = ${MCC}/;s/^mnc *= *.*/mnc = ${MNC}/;}" /root/.config/srsran/enb.conf && \
-    sed -i "/^\[mme\]/,/^\[/{s/^mcc *= *.*/mcc = ${MCC}/;s/^mnc *= *.*/mnc = ${MNC}/;}" /root/.config/srsran/epc.conf && \
-    grep -q ',999690000000001,' /root/.config/srsran/user_db.csv || \
-    echo "ue1,xor,${MCC}${MNC}0000000001,895fd70bd46fa42435ba1471665b0028,opc,9b9fb8dcae42ae23011abc20bb80796a,8000,000000000000,7,dynamic" >> /root/.config/srsran/user_data.csv
+    sed -i "/^\[mme\]/,/^\[/{s/^mcc *= *.*/mcc = ${MCC}/;s/^mnc *= *.*/mnc = ${MNC}/;}" /root/.config/srsran/epc.conf 
 
+RUN grep -q "${MCC}${MNC}0000000001," /root/.config/srsran/user_db.csv 2>/dev/null || \
+echo "ue1,xor,${MCC}${MNC}0000000001,895fd70bd46fa42435ba1471665b0028,opc,9b9fb8dcae42ae23011abc20bb80796a,8000,000000000000,7,dynamic" >> /root/.config/srsran/user_db.csv
 
 # =========================================================
 # SCRIPT FOR SELECTING DIRECT COPY : USB OR ETHERNET
