@@ -1,0 +1,17 @@
+# =============================================================================
+# SIM CARD CONFIG
+#
+# Network:
+#   MCC = 999
+#   MNC = 69
+#
+# Subscriber:
+#   IMSI = 999690000000001
+#   K    = 895fd70bd46fa42435ba1471665b0028
+#   OPC  = 9b9fb8dcae42ae23011abc20bb80796a
+#
+# Updates:
+#   - /root/.config/srsran/enb.conf
+#   - /root/.config/srsran/epc.conf
+#   - /root/.config/srsran/user_data.csv
+# =============================================================================
