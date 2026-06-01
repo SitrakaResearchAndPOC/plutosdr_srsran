@@ -183,6 +183,7 @@ RUN sed -i '/device_name/d' $ENB && \
 # Change  n_prb for 15 if BW = 3MHz
 # Change  n_prb for 25 if BW = 5MHz
 # If you have a good spectrum, tell me the optimized value of tx_gain and rx_gain 
+# for fish ball tx_gain = 60 and rx_gain = 50
 RUN sed -i 's/^n_prb.*/n_prb = 15/' $ENB && \
     sed -i 's/^tx_gain.*/tx_gain = 89/' $ENB && \
     sed -i 's/^rx_gain.*/rx_gain = 20/' $ENB 
