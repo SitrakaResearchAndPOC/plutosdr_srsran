@@ -45,7 +45,7 @@ docker  build -t srsran_pluto:v1 .
 ## Building and launching srsran
 ## DIRECT USB
 ```
-docker rm -f srsran_pluto && docker run -tid --privileged \
+docker rm -f srsran_pluto 2> /dev/null ; docker run -tid --privileged \
   --cgroupns=host \
   --net=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
@@ -79,7 +79,7 @@ docker exec -it srsran_pluto bash -c \
 export NAME_PLUTO=fishball
 ```
 ```
-docker rm -f osmobts_pluto && docker run -tid --privileged \
+docker rm -f srsran_pluto 2 > /dev/null ; docker run -tid --privileged \
   --cgroupns=host \
   --net=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
