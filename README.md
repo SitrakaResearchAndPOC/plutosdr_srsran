@@ -43,9 +43,9 @@ docker  build -t srsran_pluto:v1 .
 
 
 ## Building and launching srsran
+## DIRECT USB
 ```
-docker rm -f srsran_pluto && \
-docker run -tid --privileged \
+docker rm -f srsran_pluto && docker run -tid --privileged \
   --cgroupns=host \
   --net=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
@@ -58,14 +58,47 @@ docker run -tid --privileged \
   --env="DISPLAY=$DISPLAY" \
   --env="LC_ALL=C.UTF-8" \
   --env="LANG=C.UTF-8" \
+  --env="NAME_PLUTO=pluto" \
   --cap-add=sys_nice \
   --cap-add=ipc_lock \
   --ulimit rtprio=99 \
   --ulimit memlock=-1 \
+  --volume /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
+  --volume /run/avahi-daemon/socket:/run/avahi-daemon/socket \
   --name srsran_pluto \
   --hostname srsran_pluto \
   srsran_pluto:v1
 ```
+## DIRECT ETHERENET
+```
+export NAME_PLUTO=fishball
+```
+```
+docker rm -f osmobts_pluto && docker run -tid --privileged \
+  --cgroupns=host \
+  --net=host \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  -v /dev:/dev \
+  -v /dev/bus/usb:/dev/bus/usb \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+  -v /home/user/.Xauthority:/home/user/.Xauthority:ro \
+  --tmpfs /run \
+  --tmpfs /run/lock \
+  --env="DISPLAY=$DISPLAY" \
+  --env="LC_ALL=C.UTF-8" \
+  --env="LANG=C.UTF-8" \
+  --env="NAME_PLUTO=$NAME_PLUTO" \
+  --cap-add=sys_nice \
+  --cap-add=ipc_lock \
+  --ulimit rtprio=99 \
+  --ulimit memlock=-1 \
+  --volume /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
+  --volume /run/avahi-daemon/socket:/run/avahi-daemon/socket \
+  --name srsran_pluto \
+  --hostname srsran_pluto \
+  srsran_pluto:v1
+```
+
 ## Testing driver PlutoSDR
 ```
 xhost +
