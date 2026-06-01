@@ -69,6 +69,11 @@ docker rm -f srsran_pluto && docker run -tid --privileged \
   --hostname srsran_pluto \
   srsran_pluto:v1
 ```
+CHECK USB CONFIGURATION
+```
+docker exec -it srsran_pluto bash -c \
+'bash check_pluto_usb_cfg.sh /root/.config/srsran/enb.conf'
+```
 ## DIRECT ETHERENET
 ```
 export NAME_PLUTO=fishball
@@ -97,6 +102,10 @@ docker rm -f osmobts_pluto && docker run -tid --privileged \
   --name srsran_pluto \
   --hostname srsran_pluto \
   srsran_pluto:v1
+```
+```
+docker exec -it srsran_pluto bash -c \
+'bash check_pluto_network_cfg.sh  /root/.config/srsran/enb.conf'
 ```
 
 ## Testing driver PlutoSDR
