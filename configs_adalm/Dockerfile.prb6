@@ -1,0 +1,159 @@
+FROM ubuntu:24.04
+
+# SHELL ["/bin/bash", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# =========================================================
+# Environment
+# =========================================================
+ENV SRSRAN_INSTALL=/root/srs
+ENV LD_LIBRARY_PATH=/root/srs/lib:${LD_LIBRARY_PATH}
+ENV PKG_CONFIG_PATH=/root/srs/lib/pkgconfig:${PKG_CONFIG_PATH}
+ENV SOAPY_SDR_PLUGIN_PATH=/root/srs/lib/SoapySDR/modules0.8
+
+# =========================================================
+# Base system + build dependencies
+# =========================================================
+RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates build-essential cmake g++ git wget curl tmux nano zsh \
+    net-tools iptables inetutils-ping wireshark autoconf automake libtool \
+    pkg-config swig python3 python3-dev python3-setuptools python3-pip \
+    bison flex sudo libxml2 libxml2-dev libcdk5-dev libusb-1.0-0-dev \
+    libaio-dev libfftw3-dev libsctp-dev libboost-program-options-dev \
+    libboost-all-dev libconfig++-dev libzmq3-dev libreadline-dev \
+    libncurses5-dev libssl-dev libmbedtls-dev libosmocore-dev
+ 
+
+# =========================================================
+# Directories
+# =========================================================
+RUN mkdir -p /opt/src && mkdir -p ${SRSRAN_INSTALL}
+
+# =========================================================
+# SoapySDR
+# =========================================================
+WORKDIR /opt/src
+RUN git clone --depth 1 --branch soapy-sdr-0.8.1 https://github.com/pothosware/SoapySDR.git
+
+RUN cd SoapySDR && mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=${SRSRAN_INSTALL} \
+          -DCMAKE_PREFIX_PATH=${SRSRAN_INSTALL} \
+          -DENABLE_PYTHON=OFF .. && \
+    make -j$(nproc) && make install
+
+# =========================================================
+# libiio
+# =========================================================
+WORKDIR /opt/src
+RUN git clone --depth 1 --branch v0.24 https://github.com/analogdevicesinc/libiio.git
+
+RUN cd libiio && mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=${SRSRAN_INSTALL} \
+          -DCMAKE_PREFIX_PATH=${SRSRAN_INSTALL} \
+          -DUDEV_RULES_INSTALL_DIR=${SRSRAN_INSTALL}/etc/udev/rules.d \
+          -DHAVE_DNS_SD=OFF .. && \
+    make -j$(nproc) && make install
+
+# =========================================================
+# libad9361-iio
+# =========================================================
+WORKDIR /opt/src
+RUN git clone --depth 1 --branch v0.3 https://github.com/analogdevicesinc/libad9361-iio.git
+
+RUN cd libad9361-iio && mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=${SRSRAN_INSTALL} \
+          -DCMAKE_PREFIX_PATH=${SRSRAN_INSTALL} .. && \
+    make -j$(nproc) && make install
+
+# =========================================================
+# SoapyPlutoSDR (timestamping)
+# =========================================================
+WORKDIR /opt/src
+RUN git clone --depth 1 --branch sdr_gadget_timestamping https://github.com/pgreenland/SoapyPlutoSDR.git
+
+RUN cd SoapyPlutoSDR && \
+    sed -i 's/CXX_COMPILER_ID:GNU,Clang,AppleClang/OR:$<CXX_COMPILER_ID:GNU>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>/g' CMakeLists.txt && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=${SRSRAN_INSTALL} \
+          -DCMAKE_PREFIX_PATH=${SRSRAN_INSTALL} .. && \
+    make -j$(nproc) && make install
+
+# =========================================================
+# srsRAN 4G
+# =========================================================
+WORKDIR /opt/src
+RUN git clone --depth 1 --branch release_23_04 https://github.com/srsran/srsRAN_4G.git
+
+# Patch GCC 13
+RUN cd srsRAN_4G && sed -i '29i #include <string>' \
+    lib/include/srsran/radio/channel_mapping.h
+
+# Build srsRAN
+RUN cd srsRAN_4G && mkdir -p build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_PREFIX_PATH=${SRSRAN_INSTALL} \
+          -DCMAKE_INSTALL_PREFIX=${SRSRAN_INSTALL} \
+          -DUSE_LTE_RATES=ON \
+          -DCMAKE_C_FLAGS="-Wno-error=array-bounds" \
+          -DCMAKE_CXX_FLAGS="-Wno-error=array-bounds" .. && \
+    make -j$(nproc) && make install && ldconfig && \
+    bash ../build/srsran_install_configs.sh user
+
+# =========================================================
+# CONFIGURATION SRSRAN (IMPORTANT PART)
+# =========================================================
+
+ENV ENB=/root/.config/srsran/enb.conf 
+ENV RR=/root/.config/srsran/rr.conf 
+ENV SIB=/root/.config/srsran/sib.conf 
+    
+# -------- enb.conf cleanup --------
+RUN sed -i '/device_name/d' $ENB && \
+    sed -i '/device_args/d' $ENB && \
+    sed -i '/time_adv_nsamples/d' $ENB 
+    
+# -------- enb.conf values --------
+# Change  n_prb for 6 if BW = 1.4MHz
+# Change  n_prb for 15 if BW = 3MHz
+# Change  n_prb for 25 if BW = 5MHz
+# If you have a good spectrum, tell me the optimized value of tx_gain and rx_gain 
+RUN sed -i 's/^n_prb.*/n_prb = 6/' $ENB && \
+    sed -i 's/^tx_gain.*/tx_gain = 89/' $ENB && \
+    sed -i 's/^rx_gain.*/rx_gain = 20/' $ENB 
+    
+# -------- add Pluto SDR Soapy config --------
+# prb = 6 so value of  timestamp_every=1920
+# prb = 15 so value of  timestamp_every=3840
+# prb = 25 so value of  timestamp_every=5760
+
+RUN sed -i '/\[rf\]/a device_name = soapy' $ENB && \
+    sed -i '/device_name = soapy/a device_args = driver=plutosdr,usb_direct=1,timestamp_every=1920,loopback=0' $ENB && \
+    sed -i '/device_args/a time_adv_nsamples = 40' $ENB 
+    
+# -------- rr.conf --------
+# change dl_earfcn to 2525 for phone ; please verify if the frequency is not used 
+RUN sed -i '/cell_list/,/)/ s/^[[:space:]]*dl_earfcn[[:space:]]*=.*/    dl_earfcn = 2525;/' $RR 
+   
+# -------- sib.conf --------
+# prb = 6 so value of prach_frequ_offset = 0
+# prb = 15 so value of prach_frequ_offset = 4
+# prb = 25 so value of prach_frequ_offset = 4
+RUN sed -i 's/^\([[:space:]]*prach_freq_offset[[:space:]]*=\).*/\1 0;/' $SIB  
+
+
+# =========================================================
+# CLEANUP
+# =========================================================
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# =========================================================
+# DEFAULT
+# =========================================================
+WORKDIR /root
+CMD ["/bin/bash"]
