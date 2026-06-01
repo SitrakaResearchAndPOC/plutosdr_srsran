@@ -80,7 +80,7 @@ docker exec -it srsran_pluto bash -c \
 export NAME_PLUTO=fishball
 ```
 ```
-docker rm -f srsran_pluto 2 > /dev/null ; \
+docker rm -f srsran_pluto 2> /dev/null ; \
 docker run -tid --privileged \
   --cgroupns=host \
   --net=host \
