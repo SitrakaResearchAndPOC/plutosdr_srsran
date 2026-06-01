@@ -1,3 +1,5 @@
+MY SIMCARD SUPPORT ONLY XOR CIPHERING
+
 # =============================================================================
 # SIM CARD CONFIG
 #
