@@ -193,7 +193,7 @@ RUN sed -i 's/^n_prb.*/n_prb = 25/' $ENB && \
 # prb = 25 so value of  timestamp_every=5760
 
 RUN sed -i '/\[rf\]/a device_name = soapy' $ENB && \
-    sed -i '/device_name = soapy/a device_args = driver=plutosdr,usb_direct=1,timestamp_every=5760,loopback=0' $ENB && \
+    sed -i '/device_name = soapy/a device_args = driver=plutosdr,direct=1,timestamp_every=5760,loopback=0' $ENB && \
     sed -i '/device_args/a time_adv_nsamples = 40' $ENB 
     
 # -------- rr.conf --------
