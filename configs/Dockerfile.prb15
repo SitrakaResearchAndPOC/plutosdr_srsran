@@ -206,6 +206,40 @@ RUN sed -i '/cell_list/,/)/ s/^[[:space:]]*dl_earfcn[[:space:]]*=.*/    dl_earfc
 # prb = 25 so value of prach_frequ_offset = 4
 RUN sed -i 's/^\([[:space:]]*prach_freq_offset[[:space:]]*=\).*/\1 4;/' $SIB  
 
+
+# =============================================================================
+# SIM CARD CONFIG
+#
+# Network:
+#   MCC = 999
+#   MNC = 69
+#
+# Subscriber:
+#   IMSI = 999690000000001
+#   K    = 895fd70bd46fa42435ba1471665b0028
+#   OPC  = 9b9fb8dcae42ae23011abc20bb80796a
+#
+# Updates:
+#   - /root/.config/srsran/enb.conf
+#   - /root/.config/srsran/epc.conf
+#   - /root/.config/srsran/user_db.csv
+# =============================================================================
+
+ENV MCC=999
+ENV MNC=69
+
+## xor or mil depend of the simcard : read the simcard using gr_sim.exe to find the supported authentication
+
+RUN sed -i "/^\[enb\]/,/^\[/{s/^mcc *= *.*/mcc = ${MCC}/;s/^mnc *= *.*/mnc = ${MNC}/;}" /root/.config/srsran/enb.conf && \
+    sed -i "/^\[mme\]/,/^\[/{s/^mcc *= *.*/mcc = ${MCC}/;s/^mnc *= *.*/mnc = ${MNC}/;}" /root/.config/srsran/epc.conf && \
+    grep -q ',999690000000001,' /root/.config/srsran/user_db.csv || \
+    echo "ue1,xor,${MCC}${MNC}0000000001,895fd70bd46fa42435ba1471665b0028,opc,9b9fb8dcae42ae23011abc20bb80796a,8000,000000000000,7,dynamic" >> /root/.config/srsran/user_data.csv
+
+
+# =========================================================
+# SCRIPT FOR SELECTING DIRECT COPY : USB OR ETHERNET
+# =========================================================
+
 WORKDIR /root
 RUN wget  https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/check_pluto_network_cfg.sh && \
     wget  https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/check_pluto_usb_cfg.sh && \
