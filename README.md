@@ -4,7 +4,7 @@
 
 ## II. Installing tools
 ```
-rm -rf srsran_pluto && mkdir srsran_pluto && cd srsran_pluto
+[ -d srsran_pluto ] rm -rf srsran_pluto ; mkdir srsran_pluto && cd srsran_pluto
 ```
 ```
 apt update
@@ -21,16 +21,19 @@ cpupower frequency-set -g performance
 ## III. Choice Dockerfile
 * PRB = 6
 ```
+[ -f Dockerfile.prb6 ] rm -rf Dockerfile.prb6 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb6
 ```
 
 * PRB = 15
 ```
+[ -f Dockerfile.prb15 ] rm -rf Dockerfile.prb15 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb15
 ```
 
 * PRB = 25
 ```
+[ -f Dockerfile.prb25 ] rm -rf Dockerfile.prb25 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb25
 ```
 ## IV. Building image
@@ -154,11 +157,14 @@ ifconfig
 Let name the interface <if_name> 
 ### sharing lte traffic
 ```
-apt update && \
-apt install wget && \
-wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && \
-chmod +x 
+command -v wget >/dev/null 2>&1 || \
+(apt-get update && apt-get install -y wget && \
+[ -f srsepc_if_masq.sh ] || wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && \ 
+chmod +x  *.sh
+)
 ```
+```
+
 ```
 bash srsepc_if_masq.sh <if_name>
 ```
