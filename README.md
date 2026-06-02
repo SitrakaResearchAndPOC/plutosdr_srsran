@@ -115,7 +115,7 @@ docker exec -it srsran_pluto bash -c \
 ```
 
 ## VI. Testing driver PlutoSDR
-[screen_shot_plutosdr](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/tree/main/screen_shot)
+[screen_shot_plutosdr_srsran](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/tree/main/screen_shot)
 ```
 xhost +
 ```
