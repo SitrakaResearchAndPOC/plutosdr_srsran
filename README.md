@@ -158,13 +158,11 @@ Let name the interface <if_name>
 ### sharing lte traffic
 ```
 command -v wget >/dev/null 2>&1 || \
-(apt-get update && apt-get install -y wget && \
-[ -f srsepc_if_masq.sh ] || wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && \ 
-chmod +x  *.sh
-)
+(apt-get update && apt-get install -y wget ) ; \
+[ -f srsepc_if_masq.sh ] || \
+wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && chmod +x  *.sh
 ```
 ```
-
 ```
 bash srsepc_if_masq.sh <if_name>
 ```
