@@ -163,7 +163,6 @@ command -v wget >/dev/null 2>&1 || \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/srsepc_if_masq.sh && chmod +x  *.sh
 ```
 ```
-```
 bash srsepc_if_masq.sh <if_name>
 ```
 ### Routing internet over the interface
