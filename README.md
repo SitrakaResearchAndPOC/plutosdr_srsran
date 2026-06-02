@@ -21,19 +21,19 @@ cpupower frequency-set -g performance
 ## III. Choice Dockerfile
 * PRB = 6
 ```
-[ -f Dockerfile.prb6 ] rm -rf Dockerfile.prb6 ; \
+[ -f Dockerfile.prb6 ] && rm -rf Dockerfile.prb6 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb6
 ```
 
 * PRB = 15
 ```
-[ -f Dockerfile.prb15 ] rm -rf Dockerfile.prb15 ; \
+[ -f Dockerfile.prb15 ] && rm -rf Dockerfile.prb15 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb15
 ```
 
 * PRB = 25
 ```
-[ -f Dockerfile.prb25 ] rm -rf Dockerfile.prb25 ; \
+[ -f Dockerfile.prb25 ] && rm -rf Dockerfile.prb25 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb25
 ```
 ## IV. Building image
