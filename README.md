@@ -4,7 +4,7 @@
 
 ## II. Installing tools
 ```
-[ -d srsran_pluto ] rm -rf srsran_pluto ; mkdir srsran_pluto && cd srsran_pluto
+[ -d srsran_pluto ] && rm -rf srsran_pluto ; mkdir srsran_pluto && cd srsran_pluto
 ```
 ```
 apt update
