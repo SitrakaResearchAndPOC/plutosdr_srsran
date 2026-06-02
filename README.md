@@ -1,6 +1,6 @@
 # plutosdr_srsran
-## I. Flashing firmeware 
-[Flashing_firmeware](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/firmeware)
+## I. Flashing firmware 
+[Flashing_firmware](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/firmeware)
 
 ## II. Installing tools
 ```
@@ -44,9 +44,9 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 docker  build -t srsran_pluto:v1 .
 ```
 
-
 ## V. Launching srsran
 ### DIRECT USB
+[screen_shots_usb_direct](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/screenshot_usb_direct)
 ```
 docker rm -f srsran_pluto 2> /dev/null ; \
 docker run -tid --privileged \
@@ -79,6 +79,7 @@ docker exec -it srsran_pluto bash -c \
 'bash check_pluto_usb_cfg.sh /root/.config/srsran/enb.conf'
 ```
 ### DIRECT ETHERENET
+[screen_shots_ethernet_direct](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/screen_shot_ethernet_direct)
 ```
 export NAME_PLUTO=fishball
 ```
@@ -114,6 +115,7 @@ docker exec -it srsran_pluto bash -c \
 ```
 
 ## VI. Testing driver PlutoSDR
+[screen_shot_plutosdr](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/tree/main/screen_shot)
 ```
 xhost +
 ```
