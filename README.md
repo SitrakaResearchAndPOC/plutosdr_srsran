@@ -159,9 +159,16 @@ docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --info'
 ```
 docker exec -ti srsran_pluto bash -c 'SoapySDRUtil --find'
 ```
+
+* Over USB
 ```
-docker exec -ti srsran_pluto  bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
+docker exec -ti bulk2g_pluto  bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
 ```
+* Over Ethernet
+```
+docker exec -ti bulk2g_pluto  bash -c 'SoapySDRUtil --probe="driver=plutosdr,hostname=$NAME_PLUTO.local"'
+```  
+
 
 ## VIII. Running srsRAN LTE
 ### ON TERMINAL 1
