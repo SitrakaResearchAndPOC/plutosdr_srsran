@@ -2,7 +2,26 @@
 ## I. Flashing firmware using timestamp mode
 [Flashing_firmware](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/firmeware)
 
-## II. Installing tools
+## II. Preparing PlutoSDR
+```
+lsusb
+```
+Verify if this log exist </br>
+`Bus 001 Device 006: ID 0456:b673 Analog Devices, Inc. LibIIO based AD9363 Software Defined Radio [ADALM-PLUTO]`  </br>
+
+Launch : 
+```
+echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="0456", ATTR{idProduct}=="b673", MODE="666"' | sudo tee /etc/udev/rules.d/90-libiio_pluto.rules
+```
+Then, 
+```
+sudo udevadm control --reload-rules
+```
+```
+sudo udevadm trigger
+```
+
+## III. Installing tools
 ```
 rm -rf srsran_pluto ; mkdir srsran_pluto && cd srsran_pluto
 ```
@@ -18,7 +37,7 @@ apt-get install linux-tools-common linux-tools-generic
 ```
 cpupower frequency-set -g performance
 ```
-## III. Choice Dockerfile
+## IV. Choice Dockerfile
 * PRB = 6
 ```
 [ -f Dockerfile.prb6 ] && rm -rf Dockerfile.prb6 ; \
@@ -36,7 +55,7 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 [ -f Dockerfile.prb25 ] && rm -rf Dockerfile.prb25 ; \
 wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/refs/heads/main/configs/Dockerfile.prb25
 ```
-## IV. Building image
+## V. Building image
 ```
 [ -f "Dockerfile" ] && rm Dockerfile; mv Dockerfile.* Dockerfile
 ```
@@ -44,7 +63,7 @@ wget https://raw.githubusercontent.com/SitrakaResearchAndPOC/plutosdr_srsran/ref
 docker  build -t srsran_pluto:v1 .
 ```
 
-## V. Launching srsran
+## VI. Launching srsran
 ### DIRECT USB
 [screen_shots_usb_direct](https://github.com/SitrakaResearchAndPOC/osmobts_allsdr_docker/tree/main/plutosdr/screenshot_usb_direct)
 ```
@@ -114,7 +133,7 @@ docker exec -it srsran_pluto bash -c \
 'bash check_pluto_network_cfg.sh  /root/.config/srsran/enb.conf'
 ```
 
-## VI. Testing driver PlutoSDR
+## VII. Testing driver PlutoSDR
 [screen_shot_plutosdr_srsran](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/tree/main/screen_shot)
 ```
 xhost +
@@ -139,7 +158,7 @@ docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --find'
 ```
 docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"'
 ```
-## V. Running srsRAN LTE
+## VIII. Running srsRAN LTE
 ### ON TERMINAL 1
 ```
 cpupower frequency-set -g performance && docker exec -ti srsran_pluto bash -c 'srsepc'
@@ -176,7 +195,7 @@ sysctl -w net.ipv4.ip_forward=1
 ufw disable
 ```
 
-## VII. Configuring SIM & APN
+## IX. Configuring SIM & APN
 1) Download [GR-SIM](https://github.com/SitrakaResearchAndPOC/gr-sim-write) </br>
 2) Download grsp config [CONFIG](https://github.com/SitrakaResearchAndPOC/plutosdr_srsran/blob/main/configs_simcard_grsp/phil_greenland.grsp) ; my SIM supprot only xor for authentication algorithm </br>
 3) Load and write the config on the green card using card write </br>
