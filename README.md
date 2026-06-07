@@ -139,26 +139,30 @@ docker exec -it srsran_pluto bash -c \
 ```
 xhost +
 ```
-Change the <IP_ADDRESS>
+Change name of pluto eg : `fishball`
 ```
-docker exec -ti srsran_pluto bash -c 'ping <IP_ADDRESS>'
+export NAME_PLUTO=fishball
+```
+```
+docker exec -ti osmobts_pluto bash -c 'ping "$NAME_PLUTO.local"'
 ```
 or test ssh
 ```
-ssh-keygen -R '<IP_ADDRESS>' && docker exec -ti srsran_pluto bash -c 'ssh root@<IP_ADDRESS>'
+ssh-keygen -R "$NAME_PLUTO.local" && docker exec -ti osmobts_pluto bash -c 'ssh root@"$NAME_PLUTO.local"'
 ```
 </br>
 MDP is `analog`
 
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --info'
+docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --info'
 ```
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --find'
+docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --find'
 ```
 ```
-docker exec -ti srsran_pluto bash -c 'SoapySDRUtil  --probe="driver=plutosdr"'
+docker exec -ti osmobts_pluto bash -c 'SoapySDRUtil --probe="driver=plutosdr"'
 ```
+
 ## VIII. Running srsRAN LTE
 ### ON TERMINAL 1
 ```
