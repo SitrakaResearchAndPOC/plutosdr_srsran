@@ -30,8 +30,7 @@ RUN apt-get install -y -o Acquire::Retries=5 --no-install-recommends \
     net-tools \
     iptables \
     inetutils-ping \
-    wireshark && \
-    apt-get clean
+    wireshark 
 
 # =========================================================
 # Development toolchain
@@ -58,8 +57,7 @@ RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
     python3-pip \
     python3-setuptools \
     libxml2 \
-    libxml2-dev && \
-    apt-get clean
+    libxml2-dev
 
 # =========================================================
 # SDR / Radio stack dependencies
@@ -94,7 +92,14 @@ RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
 # Default source workspace
 # =========================================================
 WORKDIR /opt/src
-WORKDIR /opt/src
+
+# =========================================================
+# DNS FOR PLUTOSDR
+# =========================================================
+
+RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
+    apt-get install -y -o Acquire::Retries=5 --no-install-recommends \
+    libnss-mdns avahi-utils
 
 # =========================================================
 # SOAPY INSTEAD UHD
