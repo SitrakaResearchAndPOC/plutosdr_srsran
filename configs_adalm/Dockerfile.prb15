@@ -25,6 +25,13 @@ RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
     libboost-all-dev libconfig++-dev libzmq3-dev libreadline-dev \
     libncurses5-dev libssl-dev libmbedtls-dev libosmocore-dev
  
+# =========================================================
+# DNS FOR PLUTOSDR
+# =========================================================
+
+RUN apt-get update -o Acquire::Retries=5 -o Acquire::http::Timeout=30 && \
+    apt-get install -y -o Acquire::Retries=5 --no-install-recommends \
+    libnss-mdns avahi-utils
 
 # =========================================================
 # Directories
