@@ -74,7 +74,7 @@ docker run -tid --privileged \
   --net=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   -v /dev:/dev \
-  -v /dev/bus/usb:/dev/bus/usb \
+   --device=/dev/bus/usb \
   -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
   -v /home/user/.Xauthority:/home/user/.Xauthority:ro \
   --tmpfs /run \
@@ -110,7 +110,7 @@ docker run -tid --privileged \
   --net=host \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   -v /dev:/dev \
-  -v /dev/bus/usb:/dev/bus/usb \
+  --device=/dev/bus/usb \
   -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
   -v /home/user/.Xauthority:/home/user/.Xauthority:ro \
   --tmpfs /run \
